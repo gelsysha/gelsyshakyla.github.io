@@ -1,0 +1,187 @@
+[33mcommit d07d4776525c3709f1cc32b40161bdec9546a315[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: gelsysha <gelsyshakyla@gmail.com>
+Date:   Tue Feb 18 11:15:47 2025 +0700
+
+    first commit
+
+[1mdiff --git a/README.md b/README.md[m
+[1mnew file mode 100644[m
+[1mindex 0000000..0ccdb08[m
+[1m--- /dev/null[m
+[1m+++ b/README.md[m
+[36m@@ -0,0 +1 @@[m
+[32m+[m[32m# tweetly[m
+
+[33mcommit b0ee9c7f2889895cb7cf5faa56330b839af4614d[m
+Author: gelsysha <gelsyshakyla@gmail.com>
+Date:   Mon Feb 17 20:29:41 2025 +0700
+
+    first commit
+
+[1mdiff --git a/.DS_Store b/.DS_Store[m
+[1mnew file mode 100644[m
+[1mindex 0000000..14924ab[m
+Binary files /dev/null and b/.DS_Store differ
+[1mdiff --git a/config.php b/config.php[m
+[1mnew file mode 100644[m
+[1mindex 0000000..648d359[m
+[1m--- /dev/null[m
+[1m+++ b/config.php[m
+[36m@@ -0,0 +1,12 @@[m
+[32m+[m[32m<?php[m
+[32m+[m[32m$servername = "localhost";[m
+[32m+[m[32m$username = "root";[m
+[32m+[m[32m$password = "";[m
+[32m+[m[32m$dbname = "tweetly";[m
+[32m+[m
+[32m+[m[32m$conn = new mysqli($servername, $username, $password, $dbname);[m
+[32m+[m
+[32m+[m[32mif ($conn->connect_error) {[m
+[32m+[m[32m    die("Koneksi gagal: " . $conn->connect_error);[m
+[32m+[m[32m}[m
+[32m+[m[32m?>[m
+[1mdiff --git a/delete.php b/delete.php[m
+[1mnew file mode 100644[m
+[1mindex 0000000..a5b27bd[m
+[1m--- /dev/null[m
+[1m+++ b/delete.php[m
+[36m@@ -0,0 +1,30 @@[m
+[32m+[m[32m<?php[m
+[32m+[m[32msession_start();[m
+[32m+[m[32mrequire 'config.php';[m
+[32m+[m
+[32m+[m[32mif (!isset($_SESSION['user_id'])) {[m
+[32m+[m[32m    header("Location: login.php");[m
+[32m+[m[32m    exit();[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mif (isset($_GET['id'])) {[m
+[32m+[m[32m    $tweet_id = $_GET['id'];[m
+[32m+[m[32m    $user_id = $_SESSION['user_id'];[m
+[32m+[m
+[32m+[m[32m    // Cek apakah tweet ini milik user yang login[m
+[32m+[m[32m    $stmt = $conn->prepare("SELECT * FROM tweets WHERE id = ? AND user_id = ?");[m
+[32m+[m[32m    $stmt->bind_param("ii", $tweet_id, $user_id);[m
+[32m+[m[32m    $stmt->execute();[m
+[32m+[m[32m    $result = $stmt->get_result();[m
+[32m+[m
+[32m+[m[32m    if ($result->num_rows > 0) {[m
+[32m+[m[32m        // Jika tweet ditemukan, hapus dari database[m
+[32m+[m[32m        $stmt = $conn->prepare("DELETE FROM tweets WHERE id = ?");[m
+[32m+[m[32m        $stmt->bind_param("i", $tweet_id);[m
+[32m+[m[32m        $stmt->execute();[m
+[32m+[m[32m    }[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mheader("Location: index.php");[m
+[32m+[m[32mexit();[m
+[32m+[m[32m?>[m
+[1mdiff --git a/elogo.jpeg b/elogo.jpeg[m
+[1mnew file mode 100644[m
+[1mindex 0000000..3d81fa7[m
+Binary files /dev/null and b/elogo.jpeg differ
+[1mdiff --git a/helo.jpeg b/helo.jpeg[m
+[1mnew file mode 100644[m
+[1mindex 0000000..53fa1e4[m
+Binary files /dev/null and b/helo.jpeg differ
+[1mdiff --git a/index.php b/index.php[m
+[1mnew file mode 100644[m
+[1mindex 0000000..d38803f[m
+[1m--- /dev/null[m
+[1m+++ b/index.php[m
+[36m@@ -0,0 +1,342 @@[m
+[32m+[m[32m<?php[m
+[32m+[m[32msession_start();[m
+[32m+[m[32mrequire 'config.php';[m
+[32m+[m
+[32m+[m[32m$query = "SELECT tweets.*, COUNT(likes.id) AS total_likes[m[41m [m
+[32m+[m[32m          FROM tweets[m[41m [m
+[32m+[m[32m          LEFT JOIN likes ON tweets.id = likes.tweet_id[m[41m [m
+[32m+[m[32m          GROUP BY tweets.id[m[41m [m
+[32m+[m[32m          ORDER BY total_likes DESC[m[41m [m
+[32m+[m[32m          LIMIT 10";[m
+[32m+[m[32m$result = mysqli_query($conn, $query);[m
+[32m+[m
+[32m+[m[32m// Cek apakah user sudah login[m
+[32m+[m[32mif (!isset($_SESSION['user_id'])) {[m
+[32m+[m[32m    header("Location: login.php");[m
+[32m+[m[32m    exit();[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32m// Proses posting tweet[m
+[32m+[m[32mif ($_SERVER["REQUEST_METHOD"] == "POST") {[m
+[32m+[m[32m    $user_id = $_SESSION['user_id'];[m
+[32m+[m[32m    $content = isset($_POST['tweet']) && trim($_POST['tweet']) !== '' ? $_POST['tweet'] : null;[m
+[32m+[m
+[32m+[m
+[32m+[m[41m    [m
+[32m+[m[32m    // Upload file jika ada[m
+[32m+[m[32m    $attachment = null;[m
+[32m+[m[32m    if (!empty($_FILES['attachment']['name'])) {[m
+[32m+[m[32m        $target_dir = "uploads/";[m
+[32m+[m[32m        if (!is_dir($target_dir)) {[m
+[32m+[m[32m            mkdir($target_dir, 0777, true);[m
+[32m+[m[32m        }[m
+[32m+[m[32m        $target_file = $target_dir . basename($_FILES["attachment"]["name"]);[m
+[32m+[m[32m        move_uploaded_file($_FILES["attachment"]["tmp_name"], $target_file);[m
+[32m+[m[32m        $attachment = $target_file;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    // Simpan ke database[m
+[32m+[m[32m    $stmt = $conn->prepare("INSERT INTO tweets (user_id, content, attachment) VALUES (?, ?, ?)");[m
+[32m+[m[32m    $stmt->bind_param("iss", $user_id, $content, $attachment);[m
+[32m+[m[32m    $stmt->execute();[m
+[32m+[m[41m    [m
+[32m+[m[32m    // Refresh halaman setelah tweet[m
+[32m+[m[32m    header("Location: index.php");[m
+[32m+[m[32m    exit();[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32m// Ambil semua tweet dari database[m
+[32m+[m[32m$result = $conn->query("SELECT tweets.*, users.username FROM tweets JOIN users ON tweets.user_id = users.id ORDER BY created_at DESC");[m
+[32m+[m[32m?>[m
+[32m+[m
+[32m+[m[32m<!DOCTYPE html>[m
+[32m+[m[32m<html lang="id">[m
+[32m+[m[32m<head>[m
+[32m+[m[32m    <meta charset="UTF-8">[m
+[32m+[m[32m    <meta name="viewport" content="width=device-width, initial-scale=1.0">[m
+[32m+[m[32m    <title>Tweetly</title>[m
+[32m+[m
+[32m+[m[32m    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />[m
+[32m+[m[32m<script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>[m
+[32m+[m[32m<script>[m
+[32m+[m[32m    var swiper = new Swiper(".swiper-container", {[m
+[32m+[m[32m        slidesPerView: 1,[m
+[32m+[m[32m        spaceBetween: 10,[m
+[32m+[m[32m        navigation: {[m
+[32m+[m[32m            nextEl: ".swiper-button-next",[m
+[32m+[m[32m            prevEl: ".swiper-button-prev",[m
+[32m+[m[32m        },[m
+[32m+[m[32m    });[m
+[32m+[m[32m</script>[m
+[32m+[m[32m    <style>[m
+[32m+[m[41m        [m
+[32m+[m[32m        body {[m[41m [m
+[32m+[m[32m    font-family: Arial, sans-serif;[m[41m [m
+[32m+[m[32m    background: linear-gradient(to bottom, rgb(228, 228, 228),rgb(153, 90, 163), rgb(240, 214, 241));[m
+[32m+[m
+[32m+[m[32m    background-attachment: fixed;  /* Fix background agar tidak patah saat scroll */[m
+[32m+[m[32m    background-size: cover;  /* Pastikan background menyesuaikan layar */[m
+[32m+[m[32m    text-align: center;[m
+[32m+[m[32m    min-height: 100vh;[m
+[32m+[m[32m    margin: 0;[m
+[32m+[m[32m    padding: 0;[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32m        .container { width: 60%; margin: auto; padding: 20px; background: white; border-radius: 10px; }[m
+[32m+[m[32m        textarea { width: 90%; min-height: 80px; padding: 10px; border: 2px solid #ba68c8; border-radius: 10px; font-size: 16px; resize: none; }[m
+[32m+[m[32m        .tweet-box { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; }[m
+[32m+[m[32m        .tweet { background:rgb(209, 177, 215); padding: 15px; border-radius: 10px; margin: 10px auto; width: 90%; text-align: left; position: relative; }[m
+[32m+[m[32m        .btn { background-color: #ba68c8; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; }[m
+[32m+[m[32m        .like-btn { cursor: pointer; border: none; background: none; color: #880e4f; font-size: 16px; }[m
+[32m+[m[32m        .delete-btn { position: absolute; top: 10px; right: 10px; background: none; border: none; color: red; cursor: pointer; font-size: 14px; }[m
+[32m+[m
+
