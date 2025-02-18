@@ -94,7 +94,7 @@ body {
     margin-top: 10px;
 }
 
-/* Gaya untuk tweet box */
+
 .tweet-box {
     background: white;
     padding: 20px;
@@ -129,7 +129,7 @@ textarea:focus {
 /* Custom File Upload */
 .custom-file-upload {
     display: inline-block;
-    padding: 10px 16px; /* Mengurangi padding agar tidak terlalu besar di HP */
+    padding: 10px 16px; 
     border: 2px solid rgba(166, 74, 201, 0.6);
     border-radius: 10px;
     background: linear-gradient(135deg, rgba(245, 225, 252, 0.3), rgba(216, 168, 255, 0.3));
@@ -138,11 +138,11 @@ textarea:focus {
     cursor: pointer;
     transition: 0.3s ease-in-out;
     font-size: 14px;
-    backdrop-filter: blur(5px); /* Efek kaca */
+    backdrop-filter: blur(5px); 
     text-align: center;
-    max-width: 80%; /* Batas maksimal agar tidak melebihi layar */
-    width: 100%; /* Agar bisa menyesuaikan layar */
-    box-sizing: border-box; /* Mencegah box membesar di luar area */
+    max-width: 80%; 
+    width: 100%; 
+    box-sizing: border-box; 
 }
 
 .custom-file-upload:hover {
@@ -165,10 +165,10 @@ textarea:focus {
 /* Responsif untuk HP */
 @media screen and (max-width: 480px) {
     .custom-file-upload {
-        font-size: 12px; /* Menyesuaikan font agar tidak terlalu besar di HP */
-        padding: 8px 14px; /* Mengurangi padding */
-        width: 90%; /* Memberi jarak dari tepi layar */
-        margin: 0 auto; /* Tengah-tengah */
+        font-size: 12px; 
+        padding: 8px 14px; 
+        width: 90%; 
+        margin: 0 auto; 
     }
 }
 
