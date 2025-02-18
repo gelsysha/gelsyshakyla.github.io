@@ -12,19 +12,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['tweet_id']) && isset($
     $tweet_id = $_POST['tweet_id'];
     
     if ($_POST['action'] == "like") {
-        // Tambahkan like ke database
         $stmt = $conn->prepare("INSERT IGNORE INTO likes (user_id, tweet_id) VALUES (?, ?)");
         $stmt->bind_param("ii", $user_id, $tweet_id);
         $stmt->execute();
     } elseif ($_POST['action'] == "unlike") {
-        // Hapus like dari database
         $stmt = $conn->prepare("DELETE FROM likes WHERE user_id = ? AND tweet_id = ?");
         $stmt->bind_param("ii", $user_id, $tweet_id);
         $stmt->execute();
     }
 }
 
-// Kembali ke halaman utama
+
 header("Location: index.php");
 exit();
 ?>

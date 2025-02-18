@@ -1,0 +1,213 @@
+body { 
+    font-family: Arial, sans-serif; 
+    background: linear-gradient(to bottom, rgb(228, 228, 228),rgb(153, 90, 163), rgb(240, 214, 241));
+
+    background-attachment: fixed;  
+    background-size: cover;  
+    text-align: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+
+
+        .container { width: 60%; margin: auto; padding: 20px; background: white; border-radius: 10px; }
+        textarea { width: 90%; min-height: 80px; padding: 10px; border: 2px solid #ba68c8; border-radius: 10px; font-size: 16px; resize: none; }
+        .tweet-box { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; }
+        .tweet { background:rgb(209, 177, 215); padding: 15px; border-radius: 10px; margin: 10px auto; width: 90%; text-align: left; position: relative; }
+        .btn { background-color: #ba68c8; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; }
+        .like-btn { cursor: pointer; border: none; background: none; color: #880e4f; font-size: 16px; }
+        .delete-btn { position: absolute; top: 10px; right: 10px; background: none; border: none; color: red; cursor: pointer; font-size: 14px; }
+
+        
+        .comment-section {
+    margin-top: 10px;
+    padding: 10px;
+    background: #fce4ec;
+    border-radius: 10px;
+}
+
+.comment-section input {
+    width: 80%;
+    padding: 5px;
+    border: 2px solid #ba68c8;
+    border-radius: 10px;
+}
+
+.comment-btn {
+    background: #ba68c8;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.comments {
+    margin-top: 10px;
+}
+
+.comment-bubble {
+    background: #fff;
+    padding: 10px;
+    border-radius: 15px;
+    display: inline-block;
+    margin: 5px 0;
+    max-width: 80%;
+    position: relative;
+}
+
+.comment-bubble::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 15px;
+    width: 0;
+    height: 0;
+    border-top: 10px solid #fff;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+}
+
+.delete-comment-form {
+    display: inline;
+    margin-left: 10px;
+}
+
+.delete-comment-btn {
+    background: none;
+    border: none;
+    color: red;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.btn {
+    background-color: #ba68c8;
+    color: white;
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 10px;
+    font-size: 14px;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+/* Gaya untuk tweet box */
+.tweet-box {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0px 5px 15px rgba(166, 74, 201, 0.3);
+    text-align: center;
+    max-width: 650px;
+    margin: auto;
+    border: 2px solid #d8a8ff;
+}
+
+/* Styling textarea */
+textarea {
+    width: 90%;
+    height: 100px;
+    border-radius: 10px;
+    border: 2px solid #a64ac9;
+    padding: 10px;
+    font-size: 14px;
+    resize: none;
+    outline: none;
+    transition: 0.3s;
+    background: #fdf4ff;
+    color: #6a2c91;
+}
+
+textarea:focus {
+    border-color: #8c3bbd;
+    box-shadow: 0 0 10px rgba(166, 74, 201, 0.4);
+}
+
+/* Custom File Upload */
+.custom-file-upload {
+    display: inline-block;
+    padding: 10px 16px; /* Mengurangi padding agar tidak terlalu besar di HP */
+    border: 2px solid rgba(166, 74, 201, 0.6);
+    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(245, 225, 252, 0.3), rgba(216, 168, 255, 0.3));
+    color: #6a2c91;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+    font-size: 14px;
+    backdrop-filter: blur(5px); /* Efek kaca */
+    text-align: center;
+    max-width: 80%; /* Batas maksimal agar tidak melebihi layar */
+    width: 100%; /* Agar bisa menyesuaikan layar */
+    box-sizing: border-box; /* Mencegah box membesar di luar area */
+}
+
+.custom-file-upload:hover {
+    background: linear-gradient(135deg, rgba(240, 214, 255, 0.5), rgba(209, 164, 242, 0.5));
+    color: white;
+    transform: scale(1.00);
+    box-shadow: 0px 4px 15px rgba(166, 74, 201, 0.5);
+}
+
+/* Menampilkan nama file */
+#fileName {
+    display: block;
+    margin-top: 8px;
+    font-size: 14px;
+    color: #6a2c91;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Responsif untuk HP */
+@media screen and (max-width: 480px) {
+    .custom-file-upload {
+        font-size: 12px; /* Menyesuaikan font agar tidak terlalu besar di HP */
+        padding: 8px 14px; /* Mengurangi padding */
+        width: 90%; /* Memberi jarak dari tepi layar */
+        margin: 0 auto; /* Tengah-tengah */
+    }
+}
+
+
+/* Tombol Tweet */
+.btn {
+    background: linear-gradient(135deg, #a64ac9, #6a2c91);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+    font-weight: bold;
+    box-shadow: 0px 3px 10px rgba(166, 74, 201, 0.4);
+}
+
+.btn:hover {
+    background: linear-gradient(135deg, #8c3bbd, #5a1f7a);
+    transform: scale(1.05);
+    box-shadow: 0px 5px 15px rgba(166, 74, 201, 0.5);
+}
+
+.tweet {
+    background: rgb(209, 177, 215); 
+    padding: 15px; 
+    border-radius: 10px; 
+    margin: 10px auto; 
+    width: 90%; 
+    text-align: left; 
+    position: relative; 
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Efek hover untuk box postingan */
+.tweet:hover {
+    transform: translateY(-5px); /* Menarik sedikit ke atas saat hover */
+    box-shadow: 0 5px 15px rgba(166, 74, 201, 0.4); /* Menambahkan bayangan saat hover */
+    border: 2px solid #d1a0e1;
+}
+
